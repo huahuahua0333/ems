@@ -1,0 +1,93 @@
+{% extends 'layout.html' %}
+{# 继承母版layout.html，公共导航栏自动加载 #}
+
+{% block content %}
+{# 页面独有内容写在content块里 #}
+
+{# ========== 新建靓号按钮 ========== #}
+<div>
+    <a class="btn btn-success" href="/pretty/add/">
+        <span class="glyphicon glyphicon-plus-sign"></span> 新建靓号
+    </a>
+</div>
+
+{# ========== 列表面板 ========== #}
+<div class="panel panel-default" style="margin-top: 10px;">
+
+    {# 面板标题 #}
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-th-list"></span> 靓号列表
+    </div>
+
+    {# 筛选区（手机号搜索 + 等级下拉 + 状态下拉，靠右对齐） #}
+    <div class="panel-body">
+        {# method="get"：筛选参数显示在URL里，方便翻页时保留筛选条件 #}
+        <form method="get" class="form-inline pull-right">
+            <div class="form-group">
+                {# 手机号搜索框：value回填之前输入的关键词 #}
+                <input type="text" name="q" class="form-control" placeholder="搜索手机号" value="{{ search_data }}">
+            </div>
+            <div class="form-group" style="margin-left: 5px;">
+                {# 等级下拉框：selected判断当前选中了哪个 #}
+                <select name="level" class="form-control">
+                    <option value="">全部等级</option>
+                    <option value="1" {% if level_data == "1" %}selected{% endif %}>1级</option>
+                    <option value="2" {% if level_data == "2" %}selected{% endif %}>2级</option>
+                    <option value="3" {% if level_data == "3" %}selected{% endif %}>3级</option>
+                    <option value="4" {% if level_data == "4" %}selected{% endif %}>4级</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-left: 5px;">
+                {# 状态下拉框 #}
+                <select name="status" class="form-control">
+                    <option value="">全部状态</option>
+                    <option value="1" {% if status_data == "1" %}selected{% endif %}>已占用</option>
+                    <option value="2" {% if status_data == "2" %}selected{% endif %}>未使用</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-left: 5px;">筛选</button>
+        </form>
+    </div>
+
+    {# 数据表格 #}
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>号码</th>
+            <th>价格</th>
+            <th>级别</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {# 循环遍历当前页的数据 #}
+        {% for obj in queryset %}
+        <tr>
+            <td>{{ obj.id }}</td>
+            <td>{{ obj.mobile }}</td>
+            <td>{{ obj.price }}</td>
+            {# get_level_display：choices字段自动显示中文（1→"1级"） #}
+            <td>{{ obj.get_level_display }}</td>
+            {# get_status_display：choices字段自动显示中文（1→"已占用"） #}
+            <td>{{ obj.get_status_display }}</td>
+            <td>
+                {# 编辑链接：/pretty/ID/edit/ #}
+                <a class="btn btn-primary btn-xs" href="/pretty/{{ obj.id }}/edit/">编辑</a>
+                {# 删除链接：onclick弹出确认框，防止误删 #}
+                <a class="btn btn-danger btn-xs" href="/pretty/{{ obj.id }}/delete/"
+                   onclick="return confirm('确定删除该靓号？')">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {# 分页按钮（居中显示） #}
+    <div class="text-center">
+        {{ page_string }}
+    </div>
+
+</div>
+{% endblock %}

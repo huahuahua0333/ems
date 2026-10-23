@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div>
+    <a class="btn btn-success" href="/depart/add/">
+        <span class="glyphicon glyphicon-plus-sign"></span> 新建部门
+    </a>
+</div>
+<div class="panel panel-default" style="margin-top: 10px;">
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-th-list"></span> 部门列表
+    </div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for obj in queryset %}
+        <tr>
+            <td>{{ obj.id }}</td>
+            <td>{{ obj.title }}</td>
+            <td>
+                <a class="btn btn-primary btn-xs" href="/depart/{{ obj.id }}/edit/">编辑</a>
+                <a class="btn btn-danger btn-xs" href="/depart/{{ obj.id }}/delete/"
+                   onclick="return confirm('确定删除该部门？')">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
