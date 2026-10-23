@@ -173,7 +173,8 @@ queryset = models.PrettyNum.objects.filter(**data_dict)
 
 ## 截图
 
-（运行项目后可截图补充）
+<img width="1268" height="791" alt="屏幕截图 2026-10-23 094323" src="https://github.com/user-attachments/assets/0f3eb102-f349-4bb4-9006-7960c654a542" />
+
 
 ---
 
